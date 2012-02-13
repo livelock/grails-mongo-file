@@ -47,8 +47,9 @@ class BootStrap {
 ```
 
 Should a domain object need multiple files stored, you can append an additional String parameter to any of the methods above to indicate a field name, for example:
+
 ```groovy
-saveFile(file, Resource, 1, 'icon')
+saveFile(file, User, 1, 'icon')
 ```
 
 Implementation note: Each file is stored in a MongoDB collection (bucket), named after the domain class name. 
