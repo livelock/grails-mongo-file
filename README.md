@@ -25,4 +25,25 @@ deliverFile(HttpServletResponse response, Class domainClass, Long id, boolean as
 ```
 Writes the associated file to the response, either directly or as an attachment.
 
+```groovy
+dropDatabase()
+```
+Use in Bootstrap.groovy in dev and test environments to drop the database in order to start afresh. Use with caution! For example:
+
+```groovy
+import grails.util.GrailsUtil
+
+class BootStrap {
+    def fileService
+
+    def init = { servletContext ->
+        switch(GrailsUtil.environment) {
+            case "development":
+                fileService.dropDatabase()
+        }
+    }
+	....
+}
+```
+
 Implementation note: Each file is stored in a MongoDB collection (bucket), named after the domain class name. 

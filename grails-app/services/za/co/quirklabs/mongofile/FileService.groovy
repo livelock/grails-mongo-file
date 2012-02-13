@@ -152,6 +152,13 @@ class FileService {
 
 		gfs.remove(query as BasicDBObject)
 	}
+	
+	def dropDatabase() {
+	    def dbname = ApplicationHolder.application.config.mongodb?.database
+		dbname = dbname?dbname+'db':'db' // use db '<DBNAME>files' for files
+		DB db = mongo.mongo.getDB(dbname)
+		db.dropDatabase()
+	}
 
 	private GridFS getGridfs(String bucket) {
 		def gridfs = _gridfs[bucket]
