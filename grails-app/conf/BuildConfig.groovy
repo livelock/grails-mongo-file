@@ -40,3 +40,5 @@ grails.project.dependency.resolution = {
         runtime(":mongodb:1.0.0.RC3")
     }
 }
+
+grails.project.repos.default = "quirkRepo"
