@@ -50,6 +50,12 @@ Should a domain object need multiple files stored, you can append an additional 
 
 ```groovy
 saveFile(file, User, 1, 'icon')
+saveFile(thumbFile, User, 1, 'thumbnail')
 ```
 
-Implementation note: Each file is stored in a MongoDB collection (bucket), named after the domain class name. 
+Implementation note: Each file is stored in a MongoDB collection (bucket), named after the domain class name and fieldname if present, joined with an underscore (${domain}_${fieldName}). On the mongo console you could list the stored files with 
+
+```
+db.user_icon.files.find({});
+db.user_thumbnail.files.find({});
+```
