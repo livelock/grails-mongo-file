@@ -31,7 +31,7 @@ class FileService {
 	 * @param metaData
 	 * @return GridFSFile new file
 	 */
-	public GridFSFile saveFile(Class domainClass, CommonsMultipartFile file, Long id) {
+	public GridFSFile saveFile(Class domainClass, Long id, CommonsMultipartFile file) {
 	    String bucket = getBucket(domainClass)
 	    
         deleteFile(domainClass, id)
