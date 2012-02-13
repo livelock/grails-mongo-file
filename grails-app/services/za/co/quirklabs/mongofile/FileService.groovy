@@ -31,8 +31,8 @@ class FileService {
 	 * @param metaData
 	 * @return GridFSFile new file
 	 */
-	public GridFSFile saveFile(Class domainClass, Long id, CommonsMultipartFile file) {
-	    String bucket = getBucket(domainClass)
+	public GridFSFile saveFile(CommonsMultipartFile file, Class domainClass, Long id, String fieldName = '') {
+	    String bucket = getBucket(domainClass, fieldName)
 	    
         deleteFile(domainClass, id)
         saveFile(bucket, file, null, [id: id])
@@ -129,8 +129,8 @@ class FileService {
 		}
 	}
 
-    def GridFSDBFile getFile(Class domainClass, Long id) {
-        String bucket = getBucket(domainClass)
+    def GridFSDBFile getFile(Class domainClass, Long id, String fieldName = '') {
+        String bucket = getBucket(domainClass, fieldName)
 
 		return findFile(bucket, ['metadata.id': id])
 	}
@@ -141,8 +141,8 @@ class FileService {
 		return gfs.findOne(new BasicDBObject(query))
 	}
 
-    def deleteFile(Class domainClass, Long id) {
-        String bucket = getBucket(domainClass)
+    def deleteFile(Class domainClass, Long id, String fieldName = '') {
+        String bucket = getBucket(domainClass, fieldName)
         
         deleteFile(bucket, ['metadata.id': id])
     }
@@ -178,8 +178,13 @@ class FileService {
 		gridfs
 	}
 	
-	private String getBucket(Class clazz) {
-	    return clazz.simpleName.toLowerCase()
+	private String getBucket(Class clazz, String fieldName) {
+	    String bucket = clazz.simpleName.toLowerCase()
+	    if(fieldName) {
+	        bucket = "${bucket}_${fieldName}"
+	    }
+	    
+	    bucket
 	}
 
 	public String getMimeType(File file) {
@@ -200,8 +205,8 @@ class FileService {
 		return "application/octet-stream"
 	}
 	
-	public void deliverFile(HttpServletResponse response, Class domainClass, Long id, boolean asAttachment = true) {
-        GridFSDBFile file = getFile(domainClass, id)
+	public void deliverFile(HttpServletResponse response, boolean asAttachment, Class domainClass, Long id, String fieldName = '') {
+        GridFSDBFile file = getFile(domainClass, id, fieldName)
         if(file == null) {
             throw new FileNotFoundException("Could not find ${domainClass.name} file for id ${id}")
         }

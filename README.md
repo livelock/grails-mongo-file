@@ -6,7 +6,7 @@ The Mongofile plugin provides a FileService that saves, retrieves and deletes fi
 The following primary methods are available on FileService:
 
 ```groovy
-saveFile(Class domainClass, Long id, CommonsMultipartFile file)
+saveFile(CommonsMultipartFile file, Class domainClass, Long id)
 ```
 Saves a file to the MongoDB store, associated with an domain object. See the section on [uploading files](http://grails.org/doc/2.0.x/guide/theWebLayer.html#uploadingFiles) in the Grails docs.
 
@@ -21,7 +21,7 @@ getFile(Class domainClass, Long id)
 Retrieves a [GridFSDBFile](http://api.mongodb.org/java/current/com/mongodb/gridfs/GridFSDBFile.html) object from the MongoDB store
 
 ```groovy
-deliverFile(HttpServletResponse response, Class domainClass, Long id, boolean asAttachment)
+deliverFile(HttpServletResponse response, boolean asAttachment, Class domainClass, Long id)
 ```
 Writes the associated file to the response, either directly or as an attachment.
 
@@ -44,6 +44,11 @@ class BootStrap {
     }
 	....
 }
+```
+
+Should a domain object need multiple files stored, you can append an additional String parameter to any of the methods above to indicate a field name, for example:
+```groovy
+saveFile(file, Resource, 1, 'icon')
 ```
 
 Implementation note: Each file is stored in a MongoDB collection (bucket), named after the domain class name. 
