@@ -1,7 +1,15 @@
 Mongofile Plugin
 ================
 
-The Mongofile plugin provides a FileService that saves, retrieves and deletes files from a MongoDB file store, associated with a domain object. The plugin can also write a file out to an HTTP response.
+The Mongofile plugin provides a FileService that saves, retrieves and deletes files from a MongoDB file store, associated with a domain object. The plugin can also write a file out to an HTTP response. Once installed, append the following to DataSource.groovy:
+
+```groovy
+grails {
+    mongo {
+        databaseName = "db"
+    }
+}
+```
 
 The following primary methods are available on FileService:
 
