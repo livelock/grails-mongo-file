@@ -34,7 +34,7 @@ class FileService {
 	public GridFSFile saveFile(CommonsMultipartFile file, Class domainClass, Long id, String fieldName = '') {
 	    String bucket = getBucket(domainClass, fieldName)
 	    
-        deleteFile(domainClass, id)
+        deleteFile(domainClass, id, fieldName)
         saveFile(bucket, file, null, [id: id])
     }
     
