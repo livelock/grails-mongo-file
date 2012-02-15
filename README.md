@@ -11,6 +11,12 @@ grails {
 }
 ```
 
+You can inject the FileService into a Controller or another Service with
+
+```groovy
+def fileService
+```
+
 The following primary methods are available on FileService:
 
 ```groovy
