@@ -16,7 +16,6 @@ import com.mongodb.BasicDBObject
 import com.mongodb.gridfs.GridFSFile
 
 class MongofileService {
-
 	static transactional = false
 
 	def mongo
@@ -231,6 +230,13 @@ class MongofileService {
 	 * @param filename
 	 */
 	public void deliverGridFSFile(HttpServletResponse response, GridFSDBFile file, String filename = null, boolean asAttachment = true) {
+		if (file == null) {
+			try {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			} catch (Exception e2) {}
+			return;
+		}
+		
 		response.setContentType file.getContentType()
 		response.setContentLength ((int)file.getLength())
 		if (filename == null) filename = file.getFilename()

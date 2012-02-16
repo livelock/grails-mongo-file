@@ -5,10 +5,19 @@ import com.mongodb.gridfs.GridFSDBFile
 class MongofileController {
     def mongofileService
 
+    def exists(FileCommand fileCommand) {
+        GridFSDBFile file = getGridFSFile(fileCommand)
+        file != null
+    }
+
     def deliver(FileCommand fileCommand) {
-        String bucket = mongofileService.getBucketFromString(fileCommand.domainClass, fileCommand.fieldName)
-        GridFSDBFile file = mongofileService.getFile(bucket, fileCommand.id)
+        GridFSDBFile file = getGridFSFile(fileCommand)
         mongofileService.deliverGridFSFile(response,file,null,fileCommand.attachment)
+    }
+    
+    GridFSDBFile getGridFSFile(FileCommand fileCommand) {
+        String bucket = mongofileService.getBucketFromString(fileCommand.domainClass, fileCommand.fieldName)
+        mongofileService.getFile(bucket, fileCommand.id)
     }
 }
 
