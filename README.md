@@ -24,7 +24,7 @@ Each domain class in the Grails application will now have a number of methods yo
 ```groovy
 saveMongoFile(CommonsMultipartFile file, String fieldName = '')
 ```
-Saves a file to the MongoDB store, associated with the domain instance. See the section on [uploading files](http://grails.org/doc/2.0.x/guide/theWebLayer.html#uploadingFiles) in the Grails docs.
+Saves a file to the MongoDB store, associated with the domain instance, replacing any existing file for the domain instance (and fieldName if specified). See the section on [uploading files](http://grails.org/doc/2.0.x/guide/theWebLayer.html#uploadingFiles) in the Grails docs.
 
 ```groovy
 deleteMongofile(String fieldName = '')

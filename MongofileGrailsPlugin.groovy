@@ -1,5 +1,5 @@
 class MongofileGrailsPlugin {
-    def version = "0.96"
+    def version = "0.97"
     def grailsVersion = "2.0 > *"
     def dependsOn = [mongodb:"1.0.0.RC3"]
     def pluginExcludes = [
@@ -28,7 +28,7 @@ Each file is stored in a MongoDB collection (bucket), named after the domain cla
             domainClass.metaClass.getMongofile = { String fieldName = '' -> 
                 def mongofileService = org.codehaus.groovy.grails.commons.ApplicationHolder.application.getMainContext().getBean("mongofileService")
                 if(mongofileService) {
-                    return mongofileService.getFile(domainClass.clazz,id,fieldName)
+                    return mongofileService.getFile(delegate.getClass(),id,fieldName)
                 }
                 
                 null
@@ -37,14 +37,14 @@ Each file is stored in a MongoDB collection (bucket), named after the domain cla
             domainClass.metaClass.saveMongofile = { org.springframework.web.multipart.commons.CommonsMultipartFile file, String fieldName = '' -> 
                 def mongofileService = org.codehaus.groovy.grails.commons.ApplicationHolder.application.getMainContext().getBean("mongofileService")
                 if(mongofileService) {
-                    mongofileService.saveFile(file,domainClass.clazz,id,fieldName)
+                    mongofileService.saveFile(file,delegate.getClass(),id,fieldName)
                 }
             }
             
             domainClass.metaClass.deleteMongofile = { String fieldName = '' -> 
                 def mongofileService = org.codehaus.groovy.grails.commons.ApplicationHolder.application.getMainContext().getBean("mongofileService")
                 if(mongofileService) {
-                    mongofileService.deleteFile(domainClass.clazz,id,fieldName)
+                    mongofileService.deleteFile(delegate.getClass(),id,fieldName)
                 }
             }
         }
