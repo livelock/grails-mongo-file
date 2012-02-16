@@ -1,7 +1,12 @@
 Mongofile Plugin
 ================
 
-The Mongofile plugin provides a FileService that saves, retrieves and deletes files from a MongoDB file store, associated with a domain object. The plugin can also write a file out to an HTTP response. Once installed, append the following to DataSource.groovy:
+The Mongofile plugin provides a MongofileService that saves, retrieves and deletes files from a MongoDB file store, associated with a domain object. The plugin can also write a file out to an HTTP response. 
+
+Configuration
+-------------
+
+Once installed, append the following to DataSource.groovy:
 
 ```groovy
 grails {
@@ -11,13 +16,16 @@ grails {
 }
 ```
 
-You can inject the FileService into a Controller or another Service with
+CRUD Operations on Files
+------------------------
+
+You can inject the MongofileService into a Controller or another Service with
 
 ```groovy
-def fileService
+def mongofileService
 ```
 
-The following primary methods are available on FileService:
+The following primary methods are available on MongofileService:
 
 ```groovy
 saveFile(CommonsMultipartFile file, Class domainClass, Long id)
@@ -37,7 +45,7 @@ Retrieves a [GridFSDBFile](http://api.mongodb.org/java/current/com/mongodb/gridf
 ```groovy
 deliverFile(HttpServletResponse response, boolean asAttachment, Class domainClass, Long id)
 ```
-Writes the associated file to the response, either directly or as an attachment.
+Writes the associated file to the response, either directly or as an attachment. (Specifying attachment=true changes the response's Content-Disposition header.)
 
 ```groovy
 dropDatabase()
@@ -48,7 +56,7 @@ Use in Bootstrap.groovy in dev and test environments to drop the database in ord
 import grails.util.GrailsUtil
 
 class BootStrap {
-    def fileService
+    def mongofileService
 
     def init = { servletContext ->
         switch(GrailsUtil.environment) {
@@ -67,7 +75,31 @@ saveFile(file, User, 1, 'icon')
 saveFile(thumbFile, User, 1, 'thumbnail')
 ```
 
-Implementation note: Each file is stored in a MongoDB collection (bucket), named after the domain class name and fieldname if present, joined with an underscore (${domain}_${fieldName}). On the mongo console you could list the stored files with 
+Mongofile Taglib
+----------------
+
+A taglib is provided to call files from GSP pages. In Controllers and GSPs, you can get a link to a file by using, for example
+
+```groovy
+mongofile.createLinkTo(domainClass: 'User', id: 1, fieldName: 'icon', attachment: true)
+```
+
+However, it is more likely you will want to link to files stored as images or downloads. In the case of images, use for example
+
+```html
+<mongofile:img domainClass="User" id="1" fieldName="icon" />
+```
+
+To link to a file download, use the following. Note you can add extra attributes such as 'class' below:
+
+```html
+<mongofile:link domainClass="User" id="1" fieldName="pdf" class="download-pdf" />
+```
+
+Implementation note
+-------------------
+
+Each file is stored in a MongoDB collection (bucket), named after the domain class name and fieldname if present, joined with an underscore (${domain}_${fieldName}). On the mongo console you could list the stored files with 
 
 ```
 db.user_icon.files.find({});

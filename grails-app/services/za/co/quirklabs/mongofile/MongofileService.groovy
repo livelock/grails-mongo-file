@@ -1,4 +1,4 @@
-package zo.co.quirklabs.mongofile
+package za.co.quirklabs.mongofile
 
 import com.mongodb.gridfs.GridFS
 import eu.medsea.mimeutil.detector.MagicMimeMimeDetector
@@ -15,7 +15,7 @@ import com.mongodb.DB
 import com.mongodb.BasicDBObject
 import com.mongodb.gridfs.GridFSFile
 
-class FileService {
+class MongofileService {
 
 	static transactional = false
 
@@ -134,6 +134,10 @@ class FileService {
 
 		return findFile(bucket, ['metadata.id': id])
 	}
+	
+	def GridFSDBFile getFile(String bucket, Long id) {
+		return findFile(bucket, ['metadata.id': id])
+	}
 
 	def GridFSDBFile findFile(String bucket, Map query) {
 		GridFS gfs = getGridfs(bucket);
@@ -178,8 +182,12 @@ class FileService {
 		gridfs
 	}
 	
-	private String getBucket(Class clazz, String fieldName) {
-	    String bucket = clazz.simpleName.toLowerCase()
+	public String getBucket(Class clazz, String fieldName) {
+	    getBucketFromString(clazz.simpleName, fieldName)
+	}
+	
+	public String getBucketFromString(String className, String fieldName) {
+	    String bucket = className.toLowerCase()
 	    if(fieldName) {
 	        bucket = "${bucket}_${fieldName}"
 	    }
