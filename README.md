@@ -47,7 +47,7 @@ Example
 ```groovy
 def save() {
     def userInstance = new User(params)
-    def logo = request.getFile('logo')
+    def logo = request.getFile('logo') // Make sure you use <g:uploadForm> with <input type="file" name="logo" />
 
 	if (logo.empty) {
         flash.message = 'Logo must be uploaded'
