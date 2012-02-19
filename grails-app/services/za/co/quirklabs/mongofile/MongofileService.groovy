@@ -24,29 +24,29 @@ class MongofileService {
 	/**
 	 * Save a multipart file linked to an external id. Deletes any file currently linked to that id.
 	 *
-	 * @param bucket
-	 * @param file
-	 * @param filename
-	 * @param metaData
+	 * @param file instance of CommonsMultipartFile, generally from an upload
+	 * @param domainClass domain class to associate with
+	 * @param id id of the domain class to associate with
+	 * @param fieldName optional field name
 	 * @return GridFSFile new file
 	 */
 	public GridFSFile saveFile(CommonsMultipartFile file, Class domainClass, Long id, String fieldName = '') {
 	    String bucket = getBucket(domainClass, fieldName)
 	    
         deleteFile(domainClass, id, fieldName)
-        saveFile(bucket, file, null, [id: id])
+        saveFileCommons(bucket, file, null, [id: id])
     }
     
 	/**
 	 * Save a multipart file with custom metadata
 	 *
-	 * @param bucket
-	 * @param file
-	 * @param filename
-	 * @param metaData
+	 * @param bucket the name of the collection in GridFS
+	 * @param file instance of CommonsMultipartFile, generally from an upload
+	 * @param filename the filename of the file
+	 * @param metaData any metadata to save
 	 * @return GridFSFile new file
 	 */
-	public GridFSFile saveFile(String bucket, CommonsMultipartFile file, String filename = null, Map metaData = null) {
+	public GridFSFile saveFileCommons(String bucket, CommonsMultipartFile file, String filename = null, Map metaData = null) {
 		GridFS gfs = getGridfs(bucket);
 
 		// get content type
@@ -70,7 +70,16 @@ class MongofileService {
 		_saveFile(gfs, bucket, gInputFile)
 	}
 
-	public GridFSFile saveFile(String bucket, File file, String filename, Map metaData = null) {
+	/**
+	 * Save a java.io.File with custom metadata
+	 *
+	 * @param bucket the name of the collection in GridFS
+	 * @param file instance of the File
+	 * @param filename the filename of the file
+	 * @param metaData any metadata to save
+	 * @return GridFSFile new file
+	 */
+	public GridFSFile saveFileFile(String bucket, File file, String filename, Map metaData = null) {
 		GridFS gfs = getGridfs(bucket);
 
 		GridFSInputFile gInputFile = gfs.createFile(file.newInputStream());
@@ -86,14 +95,15 @@ class MongofileService {
 	}
 
 	/**
-	 * e.g. for images, where you have bytedata only
-	 * @param bucket
-	 * @param fileContents
-	 * @param filename
-	 * @param metaData
-	 * @return
+	 * Save an byte array with custom metadata e.g. for images, where you have bytedata only
+	 *
+	 * @param bucket the name of the collection in GridFS
+	 * @param fileContents byte array containing file data
+	 * @param filename the filename of the file
+	 * @param metaData any metadata to save
+	 * @return GridFSFile new file
 	 */
-	public GridFSFile saveFile(String bucket, byte[] fileContents, String filename, Map metaData = null) {
+	public GridFSFile saveFileBytes(String bucket, byte[] fileContents, String filename, Map metaData = null) {
 		GridFS gfs = getGridfs(bucket);
 
 		GridFSInputFile gInputFile = gfs.createFile(new ByteArrayInputStream(fileContents));
