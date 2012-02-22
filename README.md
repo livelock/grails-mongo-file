@@ -132,9 +132,9 @@ deliverFile(HttpServletResponse response, boolean asAttachment, Class domainClas
 Writes the associated file to the response, either directly or as an attachment. (Specifying attachment=true changes the response's Content-Disposition header.)
 
 ```groovy
-dropDatabase()
+dropCollections()
 ```
-Use in Bootstrap.groovy in dev and test environments to drop the database in order to start afresh. Use with caution! For example:
+Use to drop all collections the database in order to start afresh. Use with caution! For example:
 
 ```groovy
 import grails.util.GrailsUtil
@@ -145,12 +145,18 @@ class BootStrap {
     def init = { servletContext ->
         switch(GrailsUtil.environment) {
             case "development":
-                mongofileService.dropDatabase()
+                mongofileService.dropCollections()
         }
     }
 	....
 }
 ```
+
+```groovy
+dropDatabase()
+```
+Use to drop the database entirely in order to start afresh. Again, use with caution!
+
 
 Implementation note
 -------------------

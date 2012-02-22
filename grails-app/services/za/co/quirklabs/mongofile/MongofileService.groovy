@@ -166,9 +166,22 @@ class MongofileService {
 		gfs.remove(query as BasicDBObject)
 	}
 	
+	def dropCollections() {
+	    def dbname = ApplicationHolder.application.config.mongodb?.database
+		dbname = dbname?dbname+'db':'db'
+		DB db = mongo.mongo.getDB(dbname)
+        def collectionNames = db.getCollectionNames()
+        collectionNames.each { name ->
+            if(!name.startsWith('system.')) {
+                def collection = db.getCollectionFromString(name)
+                collection.drop()
+            }
+        }
+	}
+	
 	def dropDatabase() {
 	    def dbname = ApplicationHolder.application.config.mongodb?.database
-		dbname = dbname?dbname+'db':'db' // use db '<DBNAME>files' for files
+		dbname = dbname?dbname+'db':'db'
 		DB db = mongo.mongo.getDB(dbname)
 		db.dropDatabase()
 	}
