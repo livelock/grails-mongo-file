@@ -56,13 +56,35 @@ class MongofileTagLib {
 		def link = generateLink(attrs)
 	    def excludes = ['domainClass', 'id', 'fieldName', 'attachment']
         def attrsAsString = ApplicationTagLib.attrsToString(attrs.findAll { !(it.key in excludes) })
+        def text = body()
+        text = text.length() ? text : getFileName(attrs)
         
         out << "<a href=\"${link.encodeAsHTML()}\"${attrsAsString}>"
-        out << body()
+        out << text
         out << "</a>"
 	}
 
 	def generateLink(Map attrs) {
+	    def params = getDomainClassAndId(attrs)
+	    
+	    if(!params.domainClass) throw new IllegalArgumentException("[domainClass] attribute must be specified to for <mongofile:*> tags!")
+	    if(!params.id) throw new IllegalArgumentException("[id] attribute must be specified to for <mongofile:*> tags!")
+	    
+	    if(attrs.fieldName) params.fieldName = attrs.fieldName
+	    if(attrs.attachment) params.attachment = attrs.attachment
+	    
+		grailsLinkGenerator.link(controller: 'mongofile', action: 'deliver', params: params)
+	}
+	
+	def getFileName(Map attrs) {
+	    def params = getDomainClassAndId(attrs)
+	    String bucket = mongofileService.getBucketFromString(params.domainClass, attrs.fieldName)
+        def file = mongofileService.getFile(bucket, params.id)
+
+	    file.getFilename()
+	}
+	
+	def getDomainClassAndId(Map attrs) {
 	    def domainClass = attrs.domainClass
 	    def id = attrs.id
 	    
@@ -71,13 +93,6 @@ class MongofileTagLib {
 	        id = attrs.domainInstance.id
 	    }
 	    
-	    if(!domainClass) throw new IllegalArgumentException("[domainClass] attribute must be specified to for <mongofile:*> tags!")
-	    if(!id) throw new IllegalArgumentException("[id] attribute must be specified to for <mongofile:*> tags!")
-	    
-	    def params = [id: id, domainClass: domainClass]
-	    if(attrs.fieldName) params.fieldName = attrs.fieldName
-	    if(attrs.attachment) params.attachment = attrs.attachment
-	    
-		grailsLinkGenerator.link(controller: 'mongofile', action: 'deliver', params: params)
+	    [domainClass: domainClass, id: id]
 	}
 }

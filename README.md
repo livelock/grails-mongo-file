@@ -88,7 +88,7 @@ However, it is more likely you will want to link to files stored as images or do
 <mongofile:img domainInstance="${userInstance}" fieldName="icon" />
 ```
 
-To link to a file download, use the following. Note you can add extra attributes such as 'class' below:
+To link to a file download, use the following. Note you can add extra attributes such as 'class'. If you omit the body text in the tag, as in the example below, the file name is retrieved from the MongoDB store and used for the link text. (Note that if you are using this with large numbers of big files on a page it may be more performant to store the filename in the domain class instead.)
 
 ```html
 <mongofile:link domainInstance="${userInstance}" fieldName="pdf" class="download-pdf" />
