@@ -22,9 +22,19 @@ CRUD Operations on Files
 Each domain class in the Grails application will now have a number of methods you can call to create, retrieve, update and delete files. Note that the fieldName parameter is optional and only needs to be used in the case of a two or more files needing to be stored on a domain class instance. It can be omitted entirely for the first file if desired.
 
 ```groovy
-saveMongoFile(CommonsMultipartFile file, String fieldName = '')
+saveMongoFile(MultipartFile file, String fieldName = '')
 ```
 Saves a file to the MongoDB store, associated with the domain instance, replacing any existing file for the domain instance (and fieldName if specified). See the section on [uploading files](http://grails.org/doc/2.0.x/guide/theWebLayer.html#uploadingFiles) in the Grails docs.
+
+```groovy
+saveMongoFile(byte[] fileContents, String fileName, String fieldName = '')
+```
+Saves file bytes to the MongoDB store, associated with the domain instance, replacing any existing file for the domain instance (and fieldName if specified). 
+
+```groovy
+saveMongoFile(InputStream inputStream, String fileName, String fieldName = '')
+```
+Saves stream bytes to the MongoDB store, associated with the domain instance, replacing any existing file for the domain instance (and fieldName if specified). 
 
 ```groovy
 deleteMongofile(String fieldName = '')
@@ -112,9 +122,19 @@ def mongofileService
 The following primary methods are available on MongofileService:
 
 ```groovy
-saveFile(CommonsMultipartFile file, Class domainClass, Long id, String fieldName = '')
+saveFile(MultipartFile file, Class domainClass, Long id, String fieldName = '')
 ```
 Saves a file to the MongoDB store, associated with an domain object. See the section on [uploading files](http://grails.org/doc/2.0.x/guide/theWebLayer.html#uploadingFiles) in the Grails docs.
+
+```groovy
+saveFile(byte[] fileContents, String fileName, Class domainClass, Long id, String fieldName = '')
+```
+Saves file bytes to the MongoDB store, associated with an domain object. 
+
+```groovy
+saveFile(InputStream inputStream, String fileName, Class domainClass, Long id, String fieldName = '')
+```
+Saves stream bytes to the MongoDB store, associated with an domain object. 
 
 ```groovy
 deleteFile(Class domainClass, Long id, String fieldName = '')
