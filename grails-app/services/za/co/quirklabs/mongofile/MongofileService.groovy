@@ -271,7 +271,7 @@ class MongofileService {
 	public String getBucketFromString(String className, String fieldName) {
 	    String bucket = className.toLowerCase()
 	    if(fieldName) {
-	        bucket = "${bucket}_${fieldName.replaceAll("\\.","-")}"
+	        bucket = "${bucket}_${fieldName.replaceAll("\\.","_")}"
 	    }
 	    
 	    bucket
