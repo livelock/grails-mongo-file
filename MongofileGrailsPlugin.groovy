@@ -1,5 +1,5 @@
 class MongofileGrailsPlugin {
-    def version = "1.03"
+    def version = "1.04"
     def grailsVersion = "2.0 > *"
     def dependsOn = [mongodb:"1.0.0.RC3"]
     def pluginExcludes = [
@@ -14,9 +14,11 @@ The Mongofile plugin provides a MongofileService that saves, retrieves and delet
 
 Each file is stored in a MongoDB collection (bucket), named after the domain class name.  
 '''
+    def documentation = "https://github.com/quirklabs/grails-mongofile/blob/master/README.md"
     def license = "APACHE"
     def organization = [ name: "Quirk Labs", url: "http://www.quirklabs.co.za" ]
     def developers = [[ name: "Juri Kuehn" ]]
+    def issueManagement = [ system: "github", url: "https://github.com/quirklabs/grails-mongofile/issues" ]
     def scm = [ url: "https://github.com/quirklabs/grails-mongofile" ]
 
     def doWithDynamicMethods = { ctx ->
