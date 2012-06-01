@@ -1,4 +1,4 @@
-package za.co.quirklabs.mongofile
+package com.quirklabs.mongofile
 
 import com.mongodb.gridfs.GridFS
 import eu.medsea.mimeutil.detector.MagicMimeMimeDetector

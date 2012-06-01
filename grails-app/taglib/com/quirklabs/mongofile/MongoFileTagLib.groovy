@@ -1,4 +1,4 @@
-package za.co.quirklabs.mongofile
+package com.quirklabs.mongofile
 
 import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
