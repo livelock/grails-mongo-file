@@ -1,6 +1,6 @@
 .settings
 dependencies.groovy
-grails-mongofile*.zip*
+grails-mongo-file*.zip*
 plugin.xml
 stacktrace.log
 target/
