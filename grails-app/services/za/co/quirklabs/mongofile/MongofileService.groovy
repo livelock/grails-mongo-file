@@ -15,7 +15,7 @@ import com.mongodb.DB
 import com.mongodb.BasicDBObject
 import com.mongodb.gridfs.GridFSFile
 
-class MongofileService {
+class MongoFileService {
 	static transactional = false
 
 	def mongo

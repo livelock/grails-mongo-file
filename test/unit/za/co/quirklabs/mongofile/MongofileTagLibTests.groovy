@@ -8,8 +8,8 @@ import org.junit.*
 /**
  * See the API for {@link grails.test.mixin.web.GroovyPageUnitTestMixin} for usage instructions
  */
-@TestFor(MongofileTagLib)
-class MongofileTagLibTests {
+@TestFor(MongoFileTagLib)
+class MongoFileTagLibTests {
 
     void testSomething() {
         fail "Implement me"

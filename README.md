@@ -1,7 +1,7 @@
-Mongofile Plugin
+MongoFile Plugin
 ================
 
-The Mongofile plugin add methods to domain instances to save, retrieve and delete associated files from a MongoDB file store. The plugin can also write a file out to an HTTP response. 
+The MongoFile plugin add methods to domain instances to save, retrieve and delete associated files from a MongoDB file store. The plugin can also write a file out to an HTTP response. This plugin depends on the MongoDB plugin.
 
 Configuration
 -------------
@@ -37,27 +37,36 @@ saveMongoFile(InputStream inputStream, String fileName, String fieldName = '')
 Saves stream bytes to the MongoDB store, associated with the domain instance, replacing any existing file for the domain instance (and fieldName if specified). 
 
 ```groovy
-deleteMongofile(String fieldName = '')
+deleteMongoFile(String fieldName = '')
 ```
 Deletes the associated file from the MongoDB store.
 
 ```groovy
-getMongofile(String fieldName = '')
+getMongoFile(String fieldName = '')
 ```
 Retrieves a [GridFSDBFile](http://api.mongodb.org/java/current/com/mongodb/gridfs/GridFSDBFile.html) object from the MongoDB store
 
 ```groovy
-mongofileExists(String fieldName = '')
+mongoFileExists(String fieldName = '')
 ```
 Returns true or false depending on whether a file is associated with the domain instance. Useful to test whether to render a tag or not
 
 Example
 -------
 
+GSP:
+```html
+<g:uploadForm action="save">
+	<input type="file" name="logo" />
+	<input type="submit" />
+</g:uploadForm>
+```
+
+Controller:
 ```groovy
 def save() {
     def userInstance = new User(params)
-    def logo = request.getFile('logo') // Make sure you use <g:uploadForm> with <input type="file" name="logo" />
+    def logo = request.getFile('logo')
 
 	if (logo.empty) {
         flash.message = 'Logo must be uploaded'
@@ -70,14 +79,14 @@ def save() {
         return
     }
 
-    userInstance.saveMongofile(file)
+    userInstance.saveMongoFile(file)
 
 	flash.message = message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
     redirect(action: "show", id: userInstance.id)
 }
 ```
 
-Mongofile Taglib
+MongoFile Taglib
 ----------------
 
 A taglib is provided to call files from GSP pages. In Controllers and GSPs, you can get a link to a file by using, for example
@@ -107,19 +116,19 @@ To link to a file download, use the following. Note you can add extra attributes
 It is often useful to test whether to render the tag first:
 
 ```html
-<g:if test="${userInstance.mongofileExists('icon')}"><mongofile:img domainInstance="${userInstance}" fieldName="icon" /></g:if>
+<g:if test="${userInstance.mongoFileExists('icon')}"><mongofile:img domainInstance="${userInstance}" fieldName="icon" /></g:if>
 ```
 
-Using the MongofileService directly
+Using the MongoFileService directly
 -----------------------------------
 
-Most of the time the methods above should be enough. However, you can inject the MongofileService into a Controller or another Service with
+Most of the time the methods above should be enough. However, you can inject the MongoFileService into a Controller or another Service with
 
 ```groovy
-def mongofileService
+def mongoFileService
 ```
 
-The following primary methods are available on MongofileService:
+The following primary methods are available on MongoFileService:
 
 ```groovy
 saveFile(MultipartFile file, Class domainClass, Long id, String fieldName = '')
@@ -160,12 +169,12 @@ Use to drop all collections the database in order to start afresh. Use with caut
 import grails.util.GrailsUtil
 
 class BootStrap {
-    def mongofileService
+    def mongoFileService
 
     def init = { servletContext ->
         switch(GrailsUtil.environment) {
             case "development":
-                mongofileService.dropCollections()
+                mongoFileService.dropCollections()
         }
     }
 	....

@@ -3,11 +3,11 @@ package za.co.quirklabs.mongofile
 import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
-class MongofileTagLib {
+class MongoFileTagLib {
     static namespace = "mongofile"
     
     LinkGenerator grailsLinkGenerator
-    def mongofileService
+    def mongoFileService
     
     /**
        * Creates a link (not escaped) to the requested file.
@@ -73,13 +73,13 @@ class MongofileTagLib {
 	    if(attrs.fieldName) params.fieldName = attrs.fieldName
 	    if(attrs.attachment) params.attachment = attrs.attachment
 	    
-		grailsLinkGenerator.link(controller: 'mongofile', action: 'deliver', params: params)
+		grailsLinkGenerator.link(controller: 'mongoFile', action: 'deliver', params: params)
 	}
 	
 	def getFileName(Map attrs) {
 	    def params = getDomainClassAndId(attrs)
-	    String bucket = mongofileService.getBucketFromString(params.domainClass, attrs.fieldName)
-        def file = mongofileService.getFile(bucket, params.id)
+	    String bucket = mongoFileService.getBucketFromString(params.domainClass, attrs.fieldName)
+        def file = mongoFileService.getFile(bucket, params.id)
 
 	    file.getFilename()
 	}

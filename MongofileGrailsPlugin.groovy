@@ -1,18 +1,18 @@
-class MongofileGrailsPlugin {
-    def version = "1.04"
+class MongoFileGrailsPlugin {
+    def version = "1.1"
     def grailsVersion = "2.0 > *"
     def dependsOn = [mongodb:"1.0.0.RC3"]
     def pluginExcludes = [
         "grails-app/views/error.gsp"
     ]
 
-    def title = "Mongofile Plugin"
+    def title = "MongoFile Plugin"
     def author = "Craig Raw"
     def authorEmail = "craig@quirk.biz"
     def description = '''\
-The Mongofile plugin provides a MongofileService that saves, retrieves and deletes files from a MongoDB file store. Furthermore, the domain classes have methods injected to handle these files.
+The MongoFile plugin provides a MongoFileService that saves, retrieves and deletes files from a MongoDB file store. Furthermore, the domain classes have methods injected to handle these files.
 
-Each file is stored in a MongoDB collection (bucket), named after the domain class name.  
+Each file is stored in a MongoDB collection (bucket), named after the domain class name. This plugin depends on the MongoDB plugin.
 '''
     def documentation = "https://github.com/quirklabs/grails-mongofile/blob/master/README.md"
     def license = "APACHE"
@@ -23,44 +23,44 @@ Each file is stored in a MongoDB collection (bucket), named after the domain cla
 
     def doWithDynamicMethods = { ctx ->
         for(domainClass in application.domainClasses) {
-            domainClass.metaClass.mongofileExists = { String fieldName = '' -> 
-                getMongofile(fieldName) != null
+            domainClass.metaClass.mongoFileExists = { String fieldName = '' -> 
+                getMongoFile(fieldName) != null
             }
             
-            domainClass.metaClass.getMongofile = { String fieldName = '' -> 
-                def mongofileService = org.codehaus.groovy.grails.commons.ApplicationHolder.application.getMainContext().getBean("mongofileService")
-                if(mongofileService) {
-                    return mongofileService.getFile(delegate.getClass(), id, fieldName)
+            domainClass.metaClass.getMongoFile = { String fieldName = '' -> 
+                def mongoFileService = ctx.getBean("mongoFileService")
+                if(mongoFileService) {
+                    return mongoFileService.getFile(delegate.getClass(), id, fieldName)
                 }
                 
                 null
             }
             
-            domainClass.metaClass.saveMongofile = { org.springframework.web.multipart.MultipartFile file, String fieldName = '' -> 
-                def mongofileService = org.codehaus.groovy.grails.commons.ApplicationHolder.application.getMainContext().getBean("mongofileService")
-                if(mongofileService) {
-                    mongofileService.saveFile(file, delegate.getClass(), id, fieldName)
+            domainClass.metaClass.saveMongoFile = { org.springframework.web.multipart.MultipartFile file, String fieldName = '' -> 
+                def mongoFileService = ctx.getBean("mongoFileService")
+                if(mongoFileService) {
+                    mongoFileService.saveFile(file, delegate.getClass(), id, fieldName)
                 }
             }
             
-            domainClass.metaClass.saveMongofile = { byte[] fileContents, String fileName, String fieldName = '' -> 
-                def mongofileService = org.codehaus.groovy.grails.commons.ApplicationHolder.application.getMainContext().getBean("mongofileService")
-                if(mongofileService) {
-                    mongofileService.saveFile(fileContents, fileName, delegate.getClass(), id, fieldName)
+            domainClass.metaClass.saveMongoFile = { byte[] fileContents, String fileName, String fieldName = '' -> 
+                def mongoFileService = ctx.getBean("mongoFileService")
+                if(mongoFileService) {
+                    mongoFileService.saveFile(fileContents, fileName, delegate.getClass(), id, fieldName)
                 }
             }       
             
-            domainClass.metaClass.saveMongofile = { InputStream inputStream, String fileName, String fieldName = '' -> 
-                def mongofileService = org.codehaus.groovy.grails.commons.ApplicationHolder.application.getMainContext().getBean("mongofileService")
-                if(mongofileService) {
-                    mongofileService.saveFile(inputStream, fileName, delegate.getClass(), id, fieldName)
+            domainClass.metaClass.saveMongoFile = { InputStream inputStream, String fileName, String fieldName = '' -> 
+                def mongoFileService = ctx.getBean("mongoFileService")
+                if(mongoFileService) {
+                    mongoFileService.saveFile(inputStream, fileName, delegate.getClass(), id, fieldName)
                 }
             }                 
             
-            domainClass.metaClass.deleteMongofile = { String fieldName = '' -> 
-                def mongofileService = org.codehaus.groovy.grails.commons.ApplicationHolder.application.getMainContext().getBean("mongofileService")
-                if(mongofileService) {
-                    mongofileService.deleteFile(delegate.getClass(), id, fieldName)
+            domainClass.metaClass.deleteMongoFile = { String fieldName = '' -> 
+                def mongoFileService = ctx.getBean("mongoFileService")
+                if(mongoFileService) {
+                    mongoFileService.deleteFile(delegate.getClass(), id, fieldName)
                 }
             }
         }

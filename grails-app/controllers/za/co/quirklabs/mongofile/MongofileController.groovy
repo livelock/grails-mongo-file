@@ -2,8 +2,8 @@ package za.co.quirklabs.mongofile
 
 import com.mongodb.gridfs.GridFSDBFile
 
-class MongofileController {
-    def mongofileService
+class MongoFileController {
+    def mongoFileService
 
     def exists(FileCommand fileCommand) {
         GridFSDBFile file = getGridFSFile(fileCommand)
@@ -12,12 +12,12 @@ class MongofileController {
 
     def deliver(FileCommand fileCommand) {
         GridFSDBFile file = getGridFSFile(fileCommand)
-        mongofileService.deliverGridFSFile(response,file,null,fileCommand.attachment)
+        mongoFileService.deliverGridFSFile(response,file,null,fileCommand.attachment)
     }
     
     GridFSDBFile getGridFSFile(FileCommand fileCommand) {
-        String bucket = mongofileService.getBucketFromString(fileCommand.domainClass, fileCommand.fieldName)
-        mongofileService.getFile(bucket, fileCommand.id)
+        String bucket = mongoFileService.getBucketFromString(fileCommand.domainClass, fileCommand.fieldName)
+        mongoFileService.getFile(bucket, fileCommand.id)
     }
 }
 
